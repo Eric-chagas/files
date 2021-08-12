@@ -1,0 +1,11 @@
+version: "3.5"
+services:
+  readocly:
+    image: "redocly/redoc:latest"
+    ports:
+      - "9196:80"
+    volumes:
+      - "./api.build.json:/usr/share/nginx/html/api.build.json"
+    environment:
+      SPEC_URL: "http://localhost:9196/api.build.json"
+

@@ -1,0 +1,571 @@
+---
+  openapi: "3.0.0"
+  info: 
+    x-logo: 
+      url: "https://www.flyflapper.com/assets/ui/img/logo-dark.png"
+      backgroundColor: "#FFFFFF"
+      altText: "Flapper Logo"
+    description: "\n# Error Codes\n- **0** - OK\n- **1** - An error occurred\n- **5** - Invalid parameters\n"
+    version: "1.0.0"
+    title: "Flapper Eve API"
+    termsOfService: "http://swagger.io/terms/"
+    contact: 
+      email: "g.soares@flapper.aero"
+    license: 
+      name: "Apache 2.0"
+      url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  tags: 
+    - 
+      name: "flight"
+      x-displayName: "Voo/Cotação"
+      description: "Métodos para Voo"
+  paths: 
+    /aviationprogram/eve/flight/getbyid: 
+      get: 
+        tags: 
+          - "flight"
+        summary: "Obter voo por id"
+        operationId: "getFlightById"
+        parameters: 
+          - 
+            name: "Accept-Language"
+            in: "header"
+            description: "Define o idioma da API"
+            style: "simple"
+            schema: 
+              type: "string"
+              enum: 
+                - "en_US"
+                - "pt_BR"
+              default: "en_US"
+          - 
+            name: "Client"
+            in: "header"
+            description: "Informa a API qual client esta fazendo o request. "
+            style: "simple"
+            schema: 
+              type: "string"
+              default: "WebApp;4.0.0"
+          - 
+            name: "id"
+            in: "query"
+            required: true
+            description: "ID do voo"
+            schema: 
+              type: "number"
+        responses: 
+          200: 
+            description: "200 - OK"
+            content: 
+              application/json: 
+                schema: 
+                  allOf: 
+                    - 
+                      $ref: "#/components/schemas/BaseResponse"
+                    - 
+                      properties: 
+                        flight: 
+                          $ref: "#/paths/~1aviationprogram~1eve~1flight~1update/put/responses/200/content/application~1json/schema/allOf/1/properties/flight"
+          400: 
+            $ref: "#/paths/~1aviationprogram~1eve~1flight~1get/get/responses/400"
+    /aviationprogram/eve/flight/get: 
+      get: 
+        tags: 
+          - "flight"
+        summary: "Obter voos"
+        operationId: "getFlights"
+        parameters: 
+          - 
+            name: "id"
+            in: "query"
+            description: "ID do voo"
+            schema: 
+              type: "number"
+        responses: 
+          200: 
+            description: "200 - OK"
+            content: 
+              application/json: 
+                schema: 
+                  allOf: 
+                    - 
+                      $ref: "#/components/schemas/BaseResponse"
+                    - 
+                      properties: 
+                        flights: 
+                          type: "array"
+                          items: 
+                            $ref: "#/paths/~1aviationprogram~1eve~1flight~1update/put/responses/200/content/application~1json/schema/allOf/1/properties/flight"
+          400: 
+            description: "400 - Bad Request"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/BaseResponse"
+    /aviationprogram/eve/flight/create: 
+      post: 
+        summary: "Criar voo"
+        operationId: "createCart"
+        tags: 
+          - "flight"
+        description: ""
+        requestBody: 
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  flights: 
+                    type: "array"
+                    items: 
+                      type: "object"
+                      properties: 
+                        originOACI: 
+                          type: "string"
+                          description: "OACI do aeroporto de Origem"
+                          example: "SBMT"
+                        destinationOACI: 
+                          type: "string"
+                          description: "OACI do aeroporto de Destino"
+                          example: "SBMT"
+                        schedules: 
+                          type: "array"
+                          description: "Horarios dos voos a serem criados"
+                          items: 
+                            type: "object"
+                            properties: 
+                              going: 
+                                type: "string"
+                                description: "Data de ida"
+                                format: "date-time"
+                              return: 
+                                type: "string"
+                                description: "Data de volta"
+                                format: "date-time"
+                        estimatedTime: 
+                          description: "Tempo de voo"
+                          type: "integer"
+                        seatPrice: 
+                          description: "Valor do assento"
+                          type: "integer"
+                        numberOfSeats: 
+                          type: "integer"
+                          description: "Número total de assentos"
+        responses: 
+          200: 
+            description: "200 - OK"
+            content: 
+              application/json: 
+                examples: 
+                  exampleShared: 
+                    summary: "Resposta"
+                    value: 
+                      flights: 
+                        - 
+                          id: "8271"
+                          typeId: 2
+                          operatorFlightId: null
+                          aircraftId: "3"
+                          aircraftModelId: "19"
+                          pilotId: null
+                          coPilotId: null
+                          aircraftSpotId: "904"
+                          originSpotId: 906
+                          destinationSpotId: 906
+                          price: 400
+                          currency: "BRL"
+                          estimatedTime: 10
+                          flightDatetime: "2021-01-10 10:00:00"
+                          estimatedArrivalDatetime: "2021-01-10 10:10:00"
+                          departureDatetime: "2021-01-10 10:00:00"
+                          arrivalDatetime: "2021-01-10 10:10:00"
+                          numberOfSeats: "4"
+                          baggageInfo: null
+                          isPublic: 1
+                          isShared: 1
+                          isPanoramic: 0
+                          panoramicItineraryAvailabilityId: null
+                          flightStatusId: 2
+                          parentFlightId: null
+                          companyId: "6"
+                          cancellationFeeId: null
+                          cancellableUntilDate: null
+                          aviationProgramId: null
+                          aviationProgramFlightId: null
+                          createDatetime: "2021-08-05 00:13:50"
+                          updateDatetime: "2021-08-05 00:13:50"
+                          flightToken: "3b66f83dc30993f610c4c1d5b7e30ac79def99f9ad3e93df81cc025956c23cc6"
+                          sponsoredCampaignId: null
+                          dynamicLink: null
+                          boardingTutorialId: "65"
+                          landingTutorialId: "2"
+                          flightMetaData: null
+                          suggestedArrivalTimeAtVenue: null
+                          itineraryNotice: null
+                          emailTemplateId: null
+                          reservationEmailInfoId: null
+                        - 
+                          id: "8272"
+                          typeId: 2
+                          operatorFlightId: null
+                          aircraftId: "3"
+                          aircraftModelId: "19"
+                          pilotId: null
+                          coPilotId: null
+                          aircraftSpotId: "904"
+                          originSpotId: 906
+                          destinationSpotId: 906
+                          price: 400
+                          currency: "BRL"
+                          estimatedTime: 10
+                          flightDatetime: "2021-01-10 10:00:00"
+                          estimatedArrivalDatetime: "2021-01-10 10:10:00"
+                          departureDatetime: "2021-01-10 10:00:00"
+                          arrivalDatetime: "2021-01-10 10:10:00"
+                          numberOfSeats: "4"
+                          baggageInfo: null
+                          isPublic: 1
+                          isShared: 1
+                          isPanoramic: 0
+                          panoramicItineraryAvailabilityId: null
+                          flightStatusId: 2
+                          parentFlightId: "8271"
+                          companyId: "6"
+                          cancellationFeeId: null
+                          cancellableUntilDate: null
+                          aviationProgramId: null
+                          aviationProgramFlightId: null
+                          createDatetime: "2021-08-05 00:13:51"
+                          updateDatetime: "2021-08-05 00:13:51"
+                          flightToken: "6c0a8991bd483c2eb120f91f3df9040d51b2c1f64c6518c2506caaa11faa495a"
+                          sponsoredCampaignId: null
+                          dynamicLink: null
+                          boardingTutorialId: "65"
+                          landingTutorialId: "2"
+                          flightMetaData: null
+                          suggestedArrivalTimeAtVenue: null
+                          itineraryNotice: null
+                          emailTemplateId: null
+                          reservationEmailInfoId: null
+                      result: 
+                        status: 0
+                        message: "OK"
+                schema: 
+                  allOf: 
+                    - 
+                      $ref: "#/components/schemas/BaseResponse"
+                    - 
+                      properties: 
+                        flights: 
+                          $ref: "#/paths/~1aviationprogram~1eve~1flight~1update/put/responses/200/content/application~1json/schema/allOf/1/properties/flight"
+    /aviationprogram/eve/flight/update: 
+      put: 
+        summary: "Atualizar Voo"
+        operationId: "updateFlight"
+        tags: 
+          - "flight"
+        description: ""
+        requestBody: 
+          content: 
+            application/json: 
+              schema: 
+                type: "object"
+                properties: 
+                  flight: 
+                    type: "object"
+                    properties: 
+                      id: 
+                        type: "integer"
+                        description: "ID do voo"
+                      originOACI: 
+                        type: "string"
+                        description: "OACI do aeroporto de Origem"
+                        example: "SBMT"
+                      destinationOACI: 
+                        type: "string"
+                        description: "OACI do aeroporto de Destino"
+                        example: "SBMT"
+                      estimatedTime: 
+                        description: "Tempo de voo"
+                        type: "integer"
+                      departureDatetime: 
+                        type: "string"
+                        description: "Data e horario do voo"
+                        format: "date-time"
+                      seatPrice: 
+                        description: "Valor do assento"
+                        type: "integer"
+        responses: 
+          200: 
+            description: "200 - OK"
+            content: 
+              application/json: 
+                schema: 
+                  allOf: 
+                    - 
+                      $ref: "#/components/schemas/BaseResponse"
+                    - 
+                      properties: 
+                        flight: 
+                          type: "object"
+                          properties: 
+                            id: 
+                              type: "integer"
+                            flightToken: 
+                              type: "string"
+                            numberOfSeats: 
+                              type: "integer"
+                              description: "Número total de assentos"
+                            departureDatetime: 
+                              type: "string"
+                              format: "date-time"
+                            estimatedArrivalDatetime: 
+                              type: "string"
+                              format: "date-time"
+                            estimatedTime: 
+                              type: "integer"
+                            isPublic: 
+                              type: "integer"
+                              description: "Indica se um voo estará visivel para venda através dos canais de venda online da flapper (app, website, integrações b2b)"
+                              minimum: 0
+                              maximum: 1
+                            isShared: 
+                              type: "integer"
+                              description: "Indica se o assentos são compartilhados ou não. Se caso esse valor for 0 o cliente é obrigado a comprar todos os assentos"
+                              minimum: 0
+                              maximum: 1
+                            originSpot: 
+                              allOf: 
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    id: 
+                                      type: "integer"
+                                      format: "int32"
+                                      example: "1"
+                                    name: 
+                                      type: "string"
+                                      example: "Aeroporto Campo de Marte"
+                                - 
+                                  type: "object"
+                                  properties: 
+                                    airport: 
+                                      type: "object"
+                                      properties: 
+                                        oaci: 
+                                          type: "string"
+                                        acronym: 
+                                          type: "string"
+                                    helipad: 
+                                      type: "object"
+                                      properties: 
+                                        oaci: 
+                                          type: "string"
+                            destinationSpot: 
+                              $ref: "#/paths/~1aviationprogram~1eve~1flight~1create/post/responses/200/content/application~1json/schema/allOf/1/properties/flights/properties/originSpot"
+                            seats: 
+                              type: "array"
+                              items: 
+                                type: "object"
+                                properties: 
+                                  id: 
+                                    type: "integer"
+                                  price: 
+                                    type: "number"
+                                    format: "double"
+                            availableSeats: 
+                              type: "integer"
+                            aircraft: 
+                              type: "object"
+                              properties: 
+                                id: 
+                                  type: "string"
+                                  example: "3"
+                                name: 
+                                  type: "string"
+                                  example: "Pilatus PC-12"
+                                quantityOfPassengers: 
+                                  type: "string"
+                                  example: "8"
+                                baseSpotId: 
+                                  type: "integer"
+                                  example: "904"
+                                paintingColor: 
+                                  type: "string"
+                                  example: "White"
+                                paintingYear: 
+                                  type: "integer"
+                                  example: "2016"
+                                baggageInfo: 
+                                  type: "string"
+                                cruiseSpeed: 
+                                  type: "integer"
+                                imageUrl: 
+                                  type: "string"
+                                  example: "https://dlwwkvaei5hfp.cloudfront.net/aircrafts/1531432473893028_image.png"
+                                highlightImageUrl: 
+                                  type: "string"
+                                  example: "https://dlwwkvaei5hfp.cloudfront.net/aircrafts/1573312792640062_image.png"
+                                instantBooking: 
+                                  type: "integer"
+                                  example: "0"
+                                refurbishedAt: 
+                                  type: "string"
+                                  format: "date"
+                                seatMapImageUrl: 
+                                  type: "string"
+                                  example: "https://dlwwkvaei5hfp.cloudfront.net/aircrafts/1531432249467474_seats.png"
+                                model: 
+                                  type: "object"
+                                  properties: 
+                                    id: 
+                                      type: "integer"
+                                    manufacturer": 
+                                      type: "string"
+                                      example: "Robinson"
+                                    model: 
+                                      type: "string"
+                                      example: "R44 II"
+                                    description: 
+                                      type: "string"
+                                      example: "O Robinson 44 é uma excelente aeronave de passeio. A aeronave oferece visibilidade desobstruída para todos os passageiros. Graças ao seu tamanho compacto e silenciador de alta capacidade, o R44 é surpreendentemente silencioso e proporciona uma experiência de voo suave.\n\nA versão mais recente Raven II possui um sistema de rotor reprojetado e injeção eletrônica de combustível. Isso garante melhor aerodinâmica e mais potência em altas altitudes (por exemplo cruzando Serra do Mar no Litoral Paulista)."
+                                    quantityOfPilots: 
+                                      type: "integer"
+                                      description: "Número de pilotos"
+                                      example: 1
+                                    maxSpeed: 
+                                      type: "integer"
+                                      example: 240
+                                      description: "Velocidade máxima do modelo"
+                                    maxRange: 
+                                      type: "integer"
+                                      example: 550
+                                      description: "Alcance máximo do modelo"
+                                    quantityOfSuitcases: 
+                                      type: "integer"
+                                      example: 3
+                                    rate: 
+                                      type: "integer"
+                                    highlightImageUrl: 
+                                      type: "string"
+                                      example: "https://dlwwkvaei5hfp.cloudfront.net/aircrafts/models/r44_02_highlight.jpg"
+                                    seatMapImageUrl: 
+                                      type: "string"
+                                      example: "https://dlwwkvaei5hfp.cloudfront.net/aircrafts/models/1530734766999815_seats.png"
+                            itineraryNotice: 
+                              type: "string"
+    /aviationprogram/eve/flight/cancel: 
+      delete: 
+        tags: 
+          - "flight"
+        summary: "Cancelar Voo"
+        operationId: "cancelFlight"
+        parameters: 
+          - 
+            name: "id"
+            in: "query"
+            required: true
+            description: "ID do voo"
+            schema: 
+              type: "number"
+        responses: 
+          200: 
+            description: "200 - OK"
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/BaseResponse"
+          400: 
+            $ref: "#/paths/~1aviationprogram~1eve~1flight~1get/get/responses/400"
+  servers: 
+    - 
+      description: "Production"
+      url: "https://flyflapper.com/api/v1"
+    - 
+      description: "QA"
+      url: "https://qa.flyflapper.com/api/v1"
+  components: 
+    responses: 
+      BadRequest: 
+        description: "400 - Bad Request"
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/BaseResponse"
+      OK: 
+        description: "200 - OK"
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/BaseResponse"
+    parameters: 
+      Client: 
+        name: "Client"
+        in: "header"
+        description: "Informa a API qual client esta fazendo o request. "
+        style: "simple"
+        schema: 
+          type: "string"
+          default: "WebApp;4.0.0"
+      AcceptLanguage: 
+        name: "Accept-Language"
+        in: "header"
+        description: "Define o idioma da API"
+        style: "simple"
+        schema: 
+          type: "string"
+          enum: 
+            - "en_US"
+            - "pt_BR"
+          default: "en_US"
+      pagination: 
+        name: "pagination"
+        in: "query"
+        description: "Ativa paginação"
+        schema: 
+          type: "integer"
+          default: 0
+      page: 
+        name: "page"
+        in: "query"
+        description: "Define número da página (somente para paginação)"
+        schema: 
+          type: "integer"
+          default: 1
+      limit: 
+        name: "limit"
+        in: "query"
+        description: "Define número da página (somente para paginação)"
+        schema: 
+          type: "integer"
+          default: 30
+    schemas: 
+      BaseResponse: 
+        type: "object"
+        properties: 
+          result: 
+            type: "object"
+            properties: 
+              status: 
+                type: "integer"
+                format: "int32"
+                description: "Error code"
+              message: 
+                type: "string"
+                description: "Error message"
+      PaginationResponse: 
+        allOf: 
+          - 
+            $ref: "#/components/schemas/BaseResponse"
+          - 
+            type: "object"
+            properties: 
+              limit: 
+                type: "integer"
+                example: 30
+              totalPages: 
+                type: "integer"
+                example: 8
+              totalItems: 
+                type: "integer"
+                example: 227
